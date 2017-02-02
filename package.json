@@ -1,0 +1,44 @@
+{
+  "name": "react-is-scrolling",
+  "version": "1.0.0",
+  "description": "Simply and reactively detect if users are scrolling in your components",
+  "main": "dist/IsScrolling.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "mkdir -p ./dist && cp -r ./src/* ./dist/ && babel ./src --out-dir ./dist",
+    "dev": "NODE_ENV=development webpack-dev-server --port 4000 --content-base examples/ -d --inline --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p0o/react-is-scrolling.git"
+  },
+  "keywords": [
+    "react",
+    "scroll",
+    "scrolling",
+    "component",
+    "window",
+    "javascript"
+  ],
+  "author": "Pooria Atarzadeh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/p0o/react-is-scrolling/issues"
+  },
+  "homepage": "https://github.com/p0o/react-is-scrolling#readme",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^1.16.3"
+  }
+}
