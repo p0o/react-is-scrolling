@@ -2,8 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
-
 function debounce(func) {
   let timeout;
   return function(...args) {
@@ -54,7 +52,7 @@ const IsScrollingHoC = TheComponent =>
         this.setState({ direction: 'down' });
         return;
       }
-      this.setState({ direction: 'top' });
+      this.setState({ direction: 'up' });
     }
 
     componentDidMount() {
@@ -70,7 +68,6 @@ const IsScrollingHoC = TheComponent =>
     }
 
     setScrollOff = debounce(() => {
-      console.log('stopped');
       if (this.state.isScrolling) {
         this.setState({ isScrolling: false });
       }
@@ -81,6 +78,8 @@ const IsScrollingHoC = TheComponent =>
         <TheComponent
           {...this.props}
           isScrolling={this.state.isScrolling}
+          isScrollingDown={this.state.direction === 'down'}
+          isScrollingUp={this.state.direction === 'up'}
         />
       );
     }
