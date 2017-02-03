@@ -18,13 +18,23 @@ const overlayStyle = {
 class Page extends Component {
 
   render() {
-    const { isScrolling } = this.props;
+    const { isScrolling, isScrollingDown, isScrollingUp } = this.props;
 
     return (
       <div style={parentDivStyle}>
 
         <h1 style={{ ...overlayStyle, right: '50px' }}>
-          { isScrolling ? 'Yay! You are scrolling!' : 'Scroll Here!' }
+          {
+            !isScrolling && 'Scroll Here!'
+          }
+
+          {
+            isScrollingDown && 'You are scrolling DOWN!'
+          }
+
+          {
+            isScrollingUp && 'You are scrolling UP!'
+          }
         </h1>
 
         { !isScrolling &&
