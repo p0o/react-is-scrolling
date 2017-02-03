@@ -2,6 +2,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+
+
+function debounce(func) {
+  let timeout;
+  return function(...args) {
+    const context = this;
+
+    const lastCall = () => {
+      timeout = null;
+      func.apply(context, args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(lastCall , 100);
+  }
+}
+
 const IsScrollingHoC = TheComponent =>
   class IsScrollingComponent extends React.Component {
     constructor(props) {
@@ -29,7 +46,7 @@ const IsScrollingHoC = TheComponent =>
         this.detectDirection(lastScrollTop, this.DOMElement.document.body.scrollTop);
         this.setState({ lastScrollTop: null });
       }
-
+       this.setScrollOff();
     };
 
     detectDirection(lastScrollTop, nextScrollTop) {
@@ -43,22 +60,21 @@ const IsScrollingHoC = TheComponent =>
     componentDidMount() {
       if (this.DOMElement) {
         this.DOMElement.addEventListener('scroll', this.setScrollOn, true);
-        this.myInterval = setInterval(this.setScrollOff, 1200);
       }
     }
 
     componentWillUnmount() {
       if (this.DOMElement) {
         this.DOMElement.removeEventListener('scroll', this.setScrollOn, true);
-        clearInterval(this.myInterval);
       }
     }
 
-    setScrollOff = () => {
+    setScrollOff = debounce(() => {
+      console.log('stopped');
       if (this.state.isScrolling) {
         this.setState({ isScrolling: false });
       }
-    };
+    });
 
     render() {
       return (
