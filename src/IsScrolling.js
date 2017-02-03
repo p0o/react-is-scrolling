@@ -1,31 +1,55 @@
 /* eslint-disable no-undef */
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 const IsScrollingHoC = TheComponent =>
-  class IsScrolling extends React.Component {
+  class IsScrollingComponent extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         isScrolling: false,
+        lastScrollTop: null,
+        direction: null,
       };
     }
 
+    DOMElement = window;
+
     setScrollOn = () => {
-      if (!this.state.isScrolling) {
-        this.setState({ isScrolling: true });
+      const { isScrolling, lastScrollTop } = this.state;
+
+      if (!isScrolling) {
+        this.setState({
+          isScrolling: true,
+          lastScrollTop: this.DOMElement.document.body.scrollTop,
+        });
       }
+
+      if (lastScrollTop) {
+        this.detectDirection(lastScrollTop, this.DOMElement.document.body.scrollTop);
+        this.setState({ lastScrollTop: null });
+      }
+
     };
 
+    detectDirection(lastScrollTop, nextScrollTop) {
+      if (lastScrollTop < nextScrollTop) {
+        this.setState({ direction: 'down' });
+        return;
+      }
+      this.setState({ direction: 'top' });
+    }
+
     componentDidMount() {
-      if (window) {
-        window.addEventListener('scroll', this.setScrollOn, true);
+      if (this.DOMElement) {
+        this.DOMElement.addEventListener('scroll', this.setScrollOn, true);
         this.myInterval = setInterval(this.setScrollOff, 1200);
       }
     }
 
     componentWillUnmount() {
-      if (window) {
-        window.removeEventListener('scroll', this.setScrollOn, true);
+      if (this.DOMElement) {
+        this.DOMElement.removeEventListener('scroll', this.setScrollOn, true);
         clearInterval(this.myInterval);
       }
     }
