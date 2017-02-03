@@ -17,6 +17,10 @@ function debounce(func) {
   }
 }
 
+function getBrowserScrollTop() {
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+}
+
 const IsScrollingHoC = TheComponent =>
   class IsScrollingComponent extends React.Component {
     constructor(props) {
@@ -36,12 +40,12 @@ const IsScrollingHoC = TheComponent =>
       if (!isScrolling) {
         this.setState({
           isScrolling: true,
-          lastScrollTop: this.DOMElement.document.body.scrollTop,
+          lastScrollTop: getBrowserScrollTop(),
         });
       }
 
       if (lastScrollTop) {
-        this.detectDirection(lastScrollTop, this.DOMElement.document.body.scrollTop);
+        this.detectDirection(lastScrollTop, getBrowserScrollTop());
         this.setState({ lastScrollTop: null });
       }
        this.setScrollOff();
@@ -69,7 +73,7 @@ const IsScrollingHoC = TheComponent =>
 
     setScrollOff = debounce(() => {
       if (this.state.isScrolling) {
-        this.setState({ isScrolling: false });
+        this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
       }
     });
 
