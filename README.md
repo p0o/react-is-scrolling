@@ -60,3 +60,7 @@ function YourComponent({isScrolling, isScrollingDown, isScrollingUp}) {
 
 export default IsScrolling(YourComponent);
 ```
+
+## Demo
+
+You can check out how it works [here](https://p0o.github.io/react-is-scrolling/)
