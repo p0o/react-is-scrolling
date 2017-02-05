@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import IsScrolling from '../src/IsScrolling.js';
+import IsScrolling from '../dist/IsScrolling.js';
 
 
 const parentDivStyle = {
