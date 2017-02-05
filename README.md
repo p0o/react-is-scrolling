@@ -3,7 +3,7 @@ This package is providing you a Higher Order Component with a declarative API so
 
 `npm i react-is-scrolling --save`
 
-```
+```javascript
 import React, { Component } from 'react';
 import IsScrolling from 'react-is-scrolling';
 
@@ -36,7 +36,7 @@ Notice that this package is not using an imperative event based system like othe
 If you are not using ES7 decorator functions like `@IsScrolling` or you want to have this package on a stateless/function component, you can simply use it this way:
 
 
-```
+```javascript
 import React, { Component } from 'react';
 import IsScrolling from 'react-is-scrolling';
 
