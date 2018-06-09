@@ -44,6 +44,21 @@ function debounce(func) {
   };
 }
 
+var throttle = function throttle(func, limit) {
+  var inThrottle = void 0;
+  return function () {
+    var args = arguments;
+    var context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(function () {
+        return inThrottle = false;
+      }, limit);
+    }
+  };
+};
+
 function getBrowserScrollTop() {
   return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 }
@@ -79,11 +94,11 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         _this.setScrollOff();
       };
 
-      _this.setScrollOff = debounce(function () {
+      _this.setScrollOff = throttle(function () {
         if (_this.state.isScrolling) {
           _this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
         }
-      });
+      }, 16);
 
       _this.state = {
         isScrolling: false,

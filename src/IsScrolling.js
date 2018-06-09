@@ -2,18 +2,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function debounce(func) {
-  let timeout;
-  return function(...args) {
-    const context = this;
-
-    const lastCall = () => {
-      timeout = null;
-      func.apply(context, args);
-    };
-
-    clearTimeout(timeout);
-    timeout = setTimeout(lastCall , 100);
+const throttle = (func, limit) => {
+  let inThrottle
+  return function() {
+    const args = arguments
+    const context = this
+    if (!inThrottle) {
+      func.apply(context, args)
+      inThrottle = true
+      setTimeout(() => inThrottle = false, limit)
+    }
   }
 }
 
@@ -71,11 +69,11 @@ const IsScrollingHoC = TheComponent =>
       }
     }
 
-    setScrollOff = debounce(() => {
+    setScrollOff = throttle(() => {
       if (this.state.isScrolling) {
         this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
       }
-    });
+    }, 16);
 
     render() {
       return (
