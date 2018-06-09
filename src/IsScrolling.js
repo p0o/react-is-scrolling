@@ -73,7 +73,7 @@ const IsScrollingHoC = TheComponent =>
       if (this.state.isScrolling) {
         this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
       }
-    }, 16);
+    }, 10);
 
     render() {
       return (
