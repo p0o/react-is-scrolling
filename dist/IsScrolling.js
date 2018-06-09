@@ -25,25 +25,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable no-undef */
 
 
-function debounce(func) {
-  var timeout = void 0;
-  return function () {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    var context = this;
-
-    var lastCall = function lastCall() {
-      timeout = null;
-      func.apply(context, args);
-    };
-
-    clearTimeout(timeout);
-    timeout = setTimeout(lastCall, 100);
-  };
-}
-
 var throttle = function throttle(func, limit) {
   var inThrottle = void 0;
   return function () {
@@ -98,7 +79,7 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         if (_this.state.isScrolling) {
           _this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
         }
-      }, 16);
+      }, 10);
 
       _this.state = {
         isScrolling: false,
@@ -135,6 +116,7 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
       key: 'render',
       value: function render() {
         return _react2.default.createElement(TheComponent, _extends({}, this.props, {
+          scrollTop: getBrowserScrollTop(),
           isScrolling: this.state.isScrolling,
           isScrollingDown: this.state.direction === 'down',
           isScrollingUp: this.state.direction === 'up'
