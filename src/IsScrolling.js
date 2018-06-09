@@ -79,6 +79,7 @@ const IsScrollingHoC = TheComponent =>
       return (
         <TheComponent
           {...this.props}
+          scrollTop={getBrowserScrollTop()}
           isScrolling={this.state.isScrolling}
           isScrollingDown={this.state.direction === 'down'}
           isScrollingUp={this.state.direction === 'up'}
