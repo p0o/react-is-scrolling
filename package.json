@@ -1,6 +1,6 @@
 {
   "name": "react-is-scrolling",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simply detect if users are scrolling in your components in a declarative API",
   "main": "dist/IsScrolling.js",
   "scripts": {
