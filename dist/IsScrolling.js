@@ -57,8 +57,6 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
 
       var _this = _possibleConstructorReturn(this, (IsScrollingComponent.__proto__ || Object.getPrototypeOf(IsScrollingComponent)).call(this, props));
 
-      _this.DOMElement = window;
-
       _this.setScrollOn = function () {
         var _this$state = _this.state,
             isScrolling = _this$state.isScrolling,
@@ -90,6 +88,10 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         lastScrollTop: null,
         direction: null
       };
+
+      if (typeof window !== "undefined") {
+        _this.DOMElement = window;
+      }
       return _this;
     }
 
