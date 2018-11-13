@@ -30,9 +30,11 @@ const IsScrollingHoC = TheComponent =>
         lastScrollTop: null,
         direction: null,
       };
-    }
 
-    DOMElement = window;
+      if (typeof window !== "undefined") {
+        this.DOMElement = window;
+      }
+    }
 
     setScrollOn = () => {
       const { isScrolling, lastScrollTop } = this.state;
