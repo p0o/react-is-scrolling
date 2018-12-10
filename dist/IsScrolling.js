@@ -45,7 +45,12 @@ function debounce(func) {
 }
 
 function getBrowserScrollTop(nameOfClass) {
-  return document.getElementsByClassName(nameOfClass)[0].scrollTop || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  if (nameOfClass) {
+    if (document.getElementsByClassName(nameOfClass)[0]) {
+      return document.getElementsByClassName(nameOfClass)[0].scrollTop;
+    }
+  }
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 }
 
 var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
@@ -58,7 +63,12 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
       var _this = _possibleConstructorReturn(this, (IsScrollingComponent.__proto__ || Object.getPrototypeOf(IsScrollingComponent)).call(this, props));
 
       _this.userScrolledToBottom = function (nameOfClass) {
-        return getBrowserScrollTop(nameOfClass) + document.getElementsByClassName(nameOfClass)[0].clientHeight >= document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20;
+        if (nameOfClass) {
+          if (document.getElementsByClassName(nameOfClass)[0]) {
+            return getBrowserScrollTop(nameOfClass) + document.getElementsByClassName(nameOfClass)[0].clientHeight >= document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20;
+          }
+        }
+        return getBrowserScrollTop() + window.innerHeight >= document.documentElement.scrollHeight - 20;
       };
 
       _this.setScrollOn = function () {

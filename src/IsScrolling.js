@@ -18,8 +18,12 @@ function debounce(func) {
 }
 
 function getBrowserScrollTop(nameOfClass) {
+  if (nameOfClass) {
+    if (document.getElementsByClassName(nameOfClass)[0]) {
+      return document.getElementsByClassName(nameOfClass)[0].scrollTop;
+    }
+  }
   return (
-    document.getElementsByClassName(nameOfClass)[0].scrollTop ||
     window.pageYOffset ||
     document.documentElement.scrollTop ||
     document.body.scrollTop ||
@@ -46,10 +50,18 @@ const IsScrollingHoC = TheComponent =>
     }
 
     userScrolledToBottom = nameOfClass => {
+      if (nameOfClass) {
+        if (document.getElementsByClassName(nameOfClass)[0]) {
+          return (
+            getBrowserScrollTop(nameOfClass) +
+              document.getElementsByClassName(nameOfClass)[0].clientHeight >=
+            document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20
+          );
+        }
+      }
       return (
-        getBrowserScrollTop(nameOfClass) +
-          document.getElementsByClassName(nameOfClass)[0].clientHeight >=
-        document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20
+        getBrowserScrollTop() + window.innerHeight >=
+        document.documentElement.scrollHeight - 20
       );
     };
 
