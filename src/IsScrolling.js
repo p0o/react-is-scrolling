@@ -36,12 +36,14 @@ const IsScrollingHoC = TheComponent =>
     constructor(props) {
       super(props);
       let isScrolledToTop = getBrowserScrollTop(this.props.nameOfClass) <= 20;
+      let isCloseToTop = getBrowserScrollTop(this.props.nameOfClass) <= 200;
       this.state = {
         isScrolling: false,
         lastScrollTop: null,
         direction: null,
         isScrolledToBottom: false,
-        isScrolledToTop
+        isScrolledToTop,
+        isCloseToTop
       };
 
       if (typeof window !== 'undefined') {
@@ -79,6 +81,12 @@ const IsScrollingHoC = TheComponent =>
         this.setState({ isScrolledToBottom: true });
       } else {
         this.setState({ isScrolledToBottom: false });
+      }
+
+      if (getBrowserScrollTop(this.props.nameOfClass) <= 200) {
+        this.setState({ isCloseToTop: true });
+      } else {
+        this.setState({ isCloseToTop: false });
       }
 
       if (getBrowserScrollTop(this.props.nameOfClass) <= 20) {
@@ -136,6 +144,7 @@ const IsScrollingHoC = TheComponent =>
           isScrollingUp={this.state.direction === 'up'}
           isScrolledToBottom={this.state.isScrolledToBottom}
           isScrolledToTop={this.state.isScrolledToTop}
+          isCloseToTop={this.state.isCloseToTop}
         />
       );
     }
