@@ -17,8 +17,9 @@ function debounce(func) {
   };
 }
 
-function getBrowserScrollTop() {
+function getBrowserScrollTop(nameOfClass) {
   return (
+    document.getElementsByClassName(nameOfClass)[0].scrollTop ||
     window.pageYOffset ||
     document.documentElement.scrollTop ||
     document.body.scrollTop ||
@@ -30,7 +31,7 @@ const IsScrollingHoC = TheComponent =>
   class IsScrollingComponent extends React.Component {
     constructor(props) {
       super(props);
-      let isScrolledToTop = getBrowserScrollTop() <= 20;
+      let isScrolledToTop = getBrowserScrollTop(this.props.nameOfClass) <= 20;
       this.state = {
         isScrolling: false,
         lastScrollTop: null,
@@ -44,10 +45,11 @@ const IsScrollingHoC = TheComponent =>
       }
     }
 
-    userScrolledToBottom = () => {
+    userScrolledToBottom = nameOfClass => {
       return (
-        getBrowserScrollTop() + window.innerHeight >=
-        document.documentElement.scrollHeight - 20
+        getBrowserScrollTop(nameOfClass) +
+          document.getElementsByClassName(nameOfClass)[0].clientHeight >=
+        document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20
       );
     };
 
@@ -57,27 +59,27 @@ const IsScrollingHoC = TheComponent =>
       if (!isScrolling) {
         this.setState({
           isScrolling: true,
-          lastScrollTop: getBrowserScrollTop()
+          lastScrollTop: getBrowserScrollTop(this.props.nameOfClass)
         });
       }
-
       // If the user scrolled to the bottom of the current element
-      if (this.userScrolledToBottom()) {
+      if (this.userScrolledToBottom(this.props.nameOfClass)) {
         this.setState({ isScrolledToBottom: true });
       } else {
         this.setState({ isScrolledToBottom: false });
       }
 
-      if (getBrowserScrollTop() <= 20) {
-        console.log('isScrolledToTop', true);
+      if (getBrowserScrollTop(this.props.nameOfClass) <= 20) {
         this.setState({ isScrolledToTop: true });
       } else {
-        console.log('isScrolledToTop', false);
         this.setState({ isScrolledToTop: false });
       }
 
       if (lastScrollTop) {
-        this.detectDirection(lastScrollTop, getBrowserScrollTop());
+        this.detectDirection(
+          lastScrollTop,
+          getBrowserScrollTop(this.props.nameOfClass)
+        );
         this.setState({ lastScrollTop: null });
       }
       this.setScrollOff();

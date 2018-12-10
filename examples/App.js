@@ -50,4 +50,4 @@ class Page extends Component {
   }
 }
 
-ReactDOM.render(<Page />, document.getElementById('root'));
+ReactDOM.render(<Page nameOfClass={'root'} />, document.getElementById('root'));
