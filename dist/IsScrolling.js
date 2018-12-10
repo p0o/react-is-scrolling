@@ -57,6 +57,10 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
 
       var _this = _possibleConstructorReturn(this, (IsScrollingComponent.__proto__ || Object.getPrototypeOf(IsScrollingComponent)).call(this, props));
 
+      _this.userScrolledToBottom = function () {
+        return getBrowserScrollTop() + window.innerHeight >= document.documentElement.scrollHeight - 20;
+      };
+
       _this.setScrollOn = function () {
         var _this$state = _this.state,
             isScrolling = _this$state.isScrolling,
@@ -70,6 +74,21 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
           });
         }
 
+        // If the user scrolled to the bottom of the current element
+        if (_this.userScrolledToBottom()) {
+          _this.setState({ isScrolledToBottom: true });
+        } else {
+          _this.setState({ isScrolledToBottom: false });
+        }
+
+        if (getBrowserScrollTop() <= 20) {
+          console.log('isScrolledToTop', true);
+          _this.setState({ isScrolledToTop: true });
+        } else {
+          console.log('isScrolledToTop', false);
+          _this.setState({ isScrolledToTop: false });
+        }
+
         if (lastScrollTop) {
           _this.detectDirection(lastScrollTop, getBrowserScrollTop());
           _this.setState({ lastScrollTop: null });
@@ -79,17 +98,24 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
 
       _this.setScrollOff = debounce(function () {
         if (_this.state.isScrolling) {
-          _this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
+          _this.setState({
+            isScrolling: false,
+            direction: null,
+            lastScrollTop: null
+          });
         }
       });
 
+      var isScrolledToTop = getBrowserScrollTop() <= 20;
       _this.state = {
         isScrolling: false,
         lastScrollTop: null,
-        direction: null
+        direction: null,
+        isScrolledToBottom: false,
+        isScrolledToTop: isScrolledToTop
       };
 
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         _this.DOMElement = window;
       }
       return _this;
@@ -124,7 +150,9 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         return _react2.default.createElement(TheComponent, _extends({}, this.props, {
           isScrolling: this.state.isScrolling,
           isScrollingDown: this.state.direction === 'down',
-          isScrollingUp: this.state.direction === 'up'
+          isScrollingUp: this.state.direction === 'up',
+          isScrolledToBottom: this.state.isScrolledToBottom,
+          isScrolledToTop: this.state.isScrolledToTop
         }));
       }
     }]);
