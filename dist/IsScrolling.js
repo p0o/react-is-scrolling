@@ -44,7 +44,12 @@ function debounce(func) {
   };
 }
 
-function getBrowserScrollTop() {
+function getBrowserScrollTop(nameOfClass) {
+  if (nameOfClass) {
+    if (document.getElementsByClassName(nameOfClass)[0]) {
+      return document.getElementsByClassName(nameOfClass)[0].scrollTop;
+    }
+  }
   return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 }
 
@@ -57,6 +62,15 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
 
       var _this = _possibleConstructorReturn(this, (IsScrollingComponent.__proto__ || Object.getPrototypeOf(IsScrollingComponent)).call(this, props));
 
+      _this.userScrolledToBottom = function (nameOfClass) {
+        if (nameOfClass) {
+          if (document.getElementsByClassName(nameOfClass)[0]) {
+            return getBrowserScrollTop(nameOfClass) + document.getElementsByClassName(nameOfClass)[0].clientHeight >= document.getElementsByClassName(nameOfClass)[0].scrollHeight - 20;
+          }
+        }
+        return getBrowserScrollTop() + window.innerHeight >= document.documentElement.scrollHeight - 20;
+      };
+
       _this.setScrollOn = function () {
         var _this$state = _this.state,
             isScrolling = _this$state.isScrolling,
@@ -66,12 +80,24 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         if (!isScrolling) {
           _this.setState({
             isScrolling: true,
-            lastScrollTop: getBrowserScrollTop()
+            lastScrollTop: getBrowserScrollTop(_this.props.nameOfClass)
           });
+        }
+        // If the user scrolled to the bottom of the current element
+        if (_this.userScrolledToBottom(_this.props.nameOfClass)) {
+          _this.setState({ isScrolledToBottom: true });
+        } else {
+          _this.setState({ isScrolledToBottom: false });
+        }
+
+        if (getBrowserScrollTop(_this.props.nameOfClass) <= 20) {
+          _this.setState({ isScrolledToTop: true });
+        } else {
+          _this.setState({ isScrolledToTop: false });
         }
 
         if (lastScrollTop) {
-          _this.detectDirection(lastScrollTop, getBrowserScrollTop());
+          _this.detectDirection(lastScrollTop, getBrowserScrollTop(_this.props.nameOfClass));
           _this.setState({ lastScrollTop: null });
         }
         _this.setScrollOff();
@@ -79,17 +105,24 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
 
       _this.setScrollOff = debounce(function () {
         if (_this.state.isScrolling) {
-          _this.setState({ isScrolling: false, direction: null, lastScrollTop: null });
+          _this.setState({
+            isScrolling: false,
+            direction: null,
+            lastScrollTop: null
+          });
         }
       });
 
+      var isScrolledToTop = getBrowserScrollTop(_this.props.nameOfClass) <= 20;
       _this.state = {
         isScrolling: false,
         lastScrollTop: null,
-        direction: null
+        direction: null,
+        isScrolledToBottom: false,
+        isScrolledToTop: isScrolledToTop
       };
 
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         _this.DOMElement = window;
       }
       return _this;
@@ -124,7 +157,9 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
         return _react2.default.createElement(TheComponent, _extends({}, this.props, {
           isScrolling: this.state.isScrolling,
           isScrollingDown: this.state.direction === 'down',
-          isScrollingUp: this.state.direction === 'up'
+          isScrollingUp: this.state.direction === 'up',
+          isScrolledToBottom: this.state.isScrolledToBottom,
+          isScrolledToTop: this.state.isScrolledToTop
         }));
       }
     }]);
