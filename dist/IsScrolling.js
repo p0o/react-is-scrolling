@@ -90,6 +90,12 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
           _this.setState({ isScrolledToBottom: false });
         }
 
+        if (getBrowserScrollTop(_this.props.nameOfClass) <= 200) {
+          _this.setState({ isCloseToTop: true });
+        } else {
+          _this.setState({ isCloseToTop: false });
+        }
+
         if (getBrowserScrollTop(_this.props.nameOfClass) <= 20) {
           _this.setState({ isScrolledToTop: true });
         } else {
@@ -114,12 +120,14 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
       });
 
       var isScrolledToTop = getBrowserScrollTop(_this.props.nameOfClass) <= 20;
+      var isCloseToTop = getBrowserScrollTop(_this.props.nameOfClass) <= 200;
       _this.state = {
         isScrolling: false,
         lastScrollTop: null,
         direction: null,
         isScrolledToBottom: false,
-        isScrolledToTop: isScrolledToTop
+        isScrolledToTop: isScrolledToTop,
+        isCloseToTop: isCloseToTop
       };
 
       if (typeof window !== 'undefined') {
@@ -159,7 +167,8 @@ var IsScrollingHoC = function IsScrollingHoC(TheComponent) {
           isScrollingDown: this.state.direction === 'down',
           isScrollingUp: this.state.direction === 'up',
           isScrolledToBottom: this.state.isScrolledToBottom,
-          isScrolledToTop: this.state.isScrolledToTop
+          isScrolledToTop: this.state.isScrolledToTop,
+          isCloseToTop: this.state.isCloseToTop
         }));
       }
     }]);
